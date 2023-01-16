@@ -1,0 +1,33 @@
+set scrolloff=10
+set showmode
+set showcmd
+set visualbell
+set clipboard+=unnamed
+
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+
+let mapleader = " "
+
+set surround
+
+set highlightedyank
+
+set nerdtree
+
+set which-key
+
+let g:WhichKeyDesc_display = "<leader>d Display options"
+
+let g:WhichKeyDesc_dz_mode = "<leader>dz Toggle Zen mode"
+let g:WhichKeyDesc_dd_mode = "<leader>dd Toggle Distraction-Free mode"
+let g:WhichKeyDesc_df_mode = "<leader>dd Toggle Full Screen mode"
+let g:WhichKeyDesc_gg = "<leader>gg Generate"
+
+map <leader>dd <action>(ToggleDistractionFreeMode)
+map <leader>dz <action>(ToggleZenMode)
+map <leader>df <action>(ToggleFullScreen)
+
+map <leader>gg <action>(Generate)
