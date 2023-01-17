@@ -1,3 +1,6 @@
 [user]
 	name = Olivia Lantz
 	email = olivia@owlantz.me
+	signingKey = Olivia
+[commit]
+	gpgsign = true

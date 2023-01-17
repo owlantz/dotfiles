@@ -1,4 +1,6 @@
-(provide 'config) 
+(setq custom-file (concat user-emacs-directory "custom.el"))
+
+(load-file (concat user-emacs-directory "custom.el"))
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
