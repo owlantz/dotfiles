@@ -2,13 +2,13 @@
 
 ;; Assume swank is present in the stumpwm image
 (ql:quickload :swank)
+(ql:quickload :clx-truetype)
 
 (swank:create-server
  :dont-close t
  :port (+ swank::default-server-port 10))
 
-(when (member "ttf-fonts" (list-modules))
-  (ql:quickload :clx-truetype)
+(when (member "ttf-fonts" (list-modules) :test #'string=)
   (load-module "ttf-fonts")
   ;; For some reason, ttf-fonts is very unfriendly so we have to
   ;; do a bit of setup
