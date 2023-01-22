@@ -14,6 +14,8 @@
 ;j; Inconsolata
 (set-face-attribute 'default t :font "Inconsolata Medium")
 
+(require 'bind-key)
+
 ;; Bind C-c i to editing the init file
 (bind-key
  (kbd "C-c i")
@@ -50,7 +52,13 @@
     '(("t" "TODO task" entry (file "") (file "templates/todo.org"))
       ("j" "journal" entry (file "") (file "templates/journal.org"))
       ("m" "Meeting" entry (file "calendar.org") (file "templates/meeting.org"))))
-   (org-habit-graph-column 65))
+   (org-habit-graph-column 65)
+   (org-file-apps '((auto-mode . emacs)
+		    (directory . emacs)
+		    ("\\.mm\\'" . default)
+		    ("\\.x?html?\\'" . default)
+		    ("\\.pdf\\'" . "/usr/bin/zathura --fork %s"))))
+			       
   :config
   (add-to-list 'org-modules 'org-habit))
 
