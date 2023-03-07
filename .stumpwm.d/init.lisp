@@ -47,6 +47,8 @@
 (define-key *root-map* (kbd "q") "kill-window")
 (define-key *root-map* (kbd "w") "fother")
 
+(define-key *root-map* (kbd "y") "exec i3lock -c 000000")
+
 
 ;; Use Emacs daemon instead default Stump Emacs behavior
 (undefine-key *root-map* (kbd "e"))
