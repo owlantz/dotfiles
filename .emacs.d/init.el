@@ -11,23 +11,56 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
-;j; Inconsolata
+;; Inconsolata
 (set-face-attribute 'default t :font "Inconsolata Medium")
 
 (require 'bind-key)
 
-;; Bind C-c i to editing the init file
-(bind-key
- (kbd "C-c i")
- (lambda ()
-   (interactive)
-   (find-file "~/.emacs.d/init.el")))
+(condition-case err
+    (progn
+      (require 'use-package))
+    (error
+     (debug "Unable to load use-package. Continue?")))
 
-(require 'use-package)
+(use-package general
+  :ensure t)
+
+;; Bind C-c i to editing the init file
+(defun visit-init-file ()
+  (interactive)
+  (find-file-other-window "~/.emacs.d/init.el"))
+
+(defun visit-journal ()
+  (interactive)
+  (find-file-other-window "~/.diary/journal.org"))
 
 (use-package evil
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  :custom
+  ((evil-search-wrap t)
+   (evil-regexp-search t))
   :config
   (evil-mode 1))
+
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+
+(use-package evil-numbers
+  :after evil
+  :config
+  (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
+  (define-key evil-normal-state-map (kbd "C-x") 'evil-numbers/dec-at-pt))
+
+(use-package evil-org
+  :after org
+  :hook (org-mode . evil-org-mode)
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
 
 (use-package sourcerer-theme
   :config (load-theme 'sourcerer t))
@@ -69,17 +102,52 @@
   :config
   (setq inferior-lisp-program "sbcl"))
 
-(use-package evil-org
-  :after org
-  :hook (org-mode . (lambda () (evil-org-mode)))
-  :config
-  (require 'evil-org-agenda)
-  (evil-org-agenda-set-keys))
+(use-package projectile)
 
-(use-package god-mode)
+(use-package lsp-mode)
+(use-package lsp-ui)
+(use-package company)
 
-(use-package evil-god-state
-  :after evil god-mode
+(use-package which-key
   :config
-  (evil-define-key 'normal global-map "," 'evil-execute-in-god-state)
-  (evil-define-key 'god global-map [escape] 'evil-god-state-bail))
+  (which-key-setup-minibuffer)
+  (which-key-mode))
+
+;; Keybindings
+
+;; Because I map C-x to decrease numbers as in Vim, we need to refiine all
+;; C-x ??? commands
+
+(general-create-definer leader-def
+  :prefix "SPC")
+(general-create-definer ins-leader-def
+  :prefix "M-SPC")
+
+(general-auto-unbind-keys)
+
+(leader-def
+  :keymaps 'normal
+  "a" 'org-agenda
+  "c" 'org-capture
+  "ei" 'visit-init-file
+  "ej" 'visit-journal)
+
+(leader-def
+  :states 'motion
+  :keymaps 'org-mode-map
+  "," 'org-priority
+  "t" 'org-todo
+  "s" 'org-schedule)
+
+(general-def
+  :states 'insert
+  :keymaps 'org-mode-map
+  "RET" 'evil-org-return)
+
+(ins-leader-def
+  :states 'insert
+  :keymaps 'org-mode-map
+  :major-modes t
+  "." 'org-time-stamp
+  "!" 'org-time-stamp-inactive
+  "RET" 'org-insert-heading)
