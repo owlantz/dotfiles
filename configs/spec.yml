@@ -1,0 +1,13 @@
+emacs:
+  - .emacs.d
+git:
+  - .gitconfig
+stump: .stumpwm.d
+zsh:
+  files:
+    - .zshrc
+  depends:
+    - profile
+idea: .ideavimrc
+vim: .vimrc
+profile: .profile
